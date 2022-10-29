@@ -14,17 +14,29 @@ import FlatButton from "../UI/FlatButton";
 import { Domain } from "../Domain";
 import UserContext from "../context/UserContext";
 import * as Animatable from "react-native-animatable";
-import LinearGradient from "react-native-linear-gradient";
+// import LinearGradient from "react-native-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
 function SignUpForm({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassord] = useState("");
+  const [checkTextInput, setCheckTextInput] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { user, login } = React.useContext(UserContext);
 
   const updateEmailHandler = (enterText) => {
     setEmail(enterText);
-    // console.log(enterText);
+    if (enterText.length !== 0) {
+      setCheckTextInput(true);
+    } else {
+      setCheckTextInput(false);
+    }
+    // console.log(enterText.length);
+  };
+
+  const updateSecureTextEntry = () => {
+    setSecureTextEntry((previous) => !previous);
   };
 
   const updatePasswordHandler = (enterText) => {
@@ -72,9 +84,9 @@ function SignUpForm({ navigation }) {
     // </View>
     <View style={styletubes.container}>
       <View style={styletubes.header}>
-        <Text style={styletubes.text_header}>Welcome!</Text>
+        <Text style={styletubes.text_header}>Register Now!</Text>
       </View>
-      <View style={styletubes.footer}>
+      <Animatable.View animation="fadeInUpBig" style={styletubes.footer}>
         <Text style={styletubes.text_footer}>Email</Text>
         <View style={styletubes.action}>
           <Ionicons name="person-outline" size={20} />
@@ -83,8 +95,13 @@ function SignUpForm({ navigation }) {
             style={styletubes.textInput}
             autoCapitalize="none"
             keyboardType="email-address"
+            onChangeText={updateEmailHandler}
           />
-          <Ionicons name="checkmark-done-circle-outline" size={20} />
+          {checkTextInput ? (
+            <Animatable.View animation="bounceIn">
+              <Ionicons name="checkmark-done-circle-outline" size={20} />
+            </Animatable.View>
+          ) : null}
         </View>
         <Text style={[styletubes.text_footer, { marginTop: 35 }]}>
           Password
@@ -93,13 +110,52 @@ function SignUpForm({ navigation }) {
           <Ionicons name="lock-closed-outline" size={20} />
           <TextInput
             placeholder="Your Password"
+            secureTextEntry={secureTextEntry ? true : false}
             style={styletubes.textInput}
             autoCapitalize="none"
             // keyboardType="pa"
+            onChangeText={updatePasswordHandler}
           />
-          <Ionicons name="eye-off-outline" size={20} />
+          <TouchableOpacity onPress={updateSecureTextEntry}>
+            {secureTextEntry ? (
+              <Ionicons name="eye-off-outline" size={20} />
+            ) : (
+              <Ionicons name="eye-outline" size={20} />
+            )}
+          </TouchableOpacity>
         </View>
-      </View>
+
+        <View style={styletubes.button}>
+          <LinearGradient
+            colors={["#08d4c4", "#01ab9d"]}
+            style={styletubes.signIn}
+          >
+            <TouchableOpacity onPress={saveUser}>
+              <Text style={[styletubes.textSign, { color: "#fff" }]}>
+                Sign Up
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={[
+              styletubes.signIn,
+              { borderColor: "#009387", borderWidth: 1, marginTop: 15 },
+            ]}
+          >
+            <Text
+              style={[
+                styletubes.textSign,
+                {
+                  color: "#009387",
+                },
+              ]}
+            >
+              Log In
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Animatable.View>
     </View>
   );
 }

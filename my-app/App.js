@@ -40,6 +40,7 @@ function BottomTabs() {
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="list" color={color} size={size} />
           ),
+          headerShown: false,
         })}
         name="Todo List"
         component={AllTodo}

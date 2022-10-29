@@ -28,7 +28,7 @@ function TdoList({ _id, task }) {
       <View style={styles.container}>
         <Text style={styles.task}>{task}</Text>
         <Pressable onPress={deleteTaskHandler}>
-          <Ionicons name="trash-outline" size={22} />
+          <Ionicons name="trash-outline" size={20} />
         </Pressable>
       </View>
     </Pressable>
@@ -39,18 +39,20 @@ export default TdoList;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#bbc0c9",
+    // alignItems: "center",
+    backgroundColor: "#E7E9EB",
     // paddingHorizontal: 12,
     // paddingVertical: 10,
-    margin: 20,
+    // margin: 20,
+    marginVertical: 10,
     padding: 10,
+    borderRadius: 5,
   },
   task: {
-    fontWeight: "bold",
+    fontWeight: "600",
     fontSize: 20,
     // textAlign: "center",
   },
