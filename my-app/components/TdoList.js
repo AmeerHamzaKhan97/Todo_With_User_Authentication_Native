@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 10,
     borderRadius: 5,
+    elevation: 5,
   },
   task: {
     fontWeight: "600",

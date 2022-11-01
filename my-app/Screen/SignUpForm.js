@@ -21,6 +21,7 @@ import { Ionicons } from "@expo/vector-icons";
 function SignUpForm({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassord] = useState("");
+  const [username, setUsername] = useState("");
   const [checkTextInput, setCheckTextInput] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { user, login } = React.useContext(UserContext);
@@ -35,6 +36,10 @@ function SignUpForm({ navigation }) {
     // console.log(enterText.length);
   };
 
+  const updateUserNameHandler = (enterText) => {
+    setUsername(enterText);
+  };
+
   const updateSecureTextEntry = () => {
     setSecureTextEntry((previous) => !previous);
   };
@@ -44,7 +49,7 @@ function SignUpForm({ navigation }) {
   };
 
   const saveUser = () => {
-    const user = { email, password };
+    const user = { email, password, username };
     console.log(user);
     fetch(`${Domain}/api/v1/signup`, {
       method: "POST",
@@ -87,7 +92,24 @@ function SignUpForm({ navigation }) {
         <Text style={styletubes.text_header}>Register Now!</Text>
       </View>
       <Animatable.View animation="fadeInUpBig" style={styletubes.footer}>
-        <Text style={styletubes.text_footer}>Email</Text>
+        <Text style={styletubes.text_footer}>Username</Text>
+        <View style={styletubes.action}>
+          <Ionicons name="person-outline" size={20} />
+          <TextInput
+            placeholder="Your Username"
+            style={styletubes.textInput}
+            autoCapitalize="none"
+            // keyboardType="email-address"
+            onChangeText={updateUserNameHandler}
+          />
+          {/* {checkTextInput ? (
+            <Animatable.View animation="bounceIn">
+              <Ionicons name="checkmark-done-circle-outline" size={20} />
+            </Animatable.View>
+          ) : null} */}
+        </View>
+
+        <Text style={[styletubes.text_footer, { marginTop: 35 }]}>Email</Text>
         <View style={styletubes.action}>
           <Ionicons name="person-outline" size={20} />
           <TextInput

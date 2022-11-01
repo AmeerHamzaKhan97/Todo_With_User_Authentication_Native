@@ -24,7 +24,7 @@ const Bottom = createBottomTabNavigator();
 
 function BottomTabs() {
   return (
-    <Bottom.Navigator>
+    <Bottom.Navigator screenOptions={{ tabBarActiveTintColor: "#009387" }}>
       <Bottom.Screen
         options={({ navigation }) => ({
           headerRight: () => (
@@ -41,6 +41,7 @@ function BottomTabs() {
             <Ionicons name="list" color={color} size={size} />
           ),
           headerShown: false,
+          // tabBarActiveTintColor: "#009387",
         })}
         name="Todo List"
         component={AllTodo}

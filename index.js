@@ -74,7 +74,7 @@ app.get("/api/v1/user", verify_jwt, async (req, res) => {
 
 app.post("/api/v1/addtask", (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const { textInput, userId } = req.body;
     const newTask = new taskModel({
       task: textInput,
@@ -179,9 +179,9 @@ app.post("/api/v1/saveprofile", async (req, res) => {
 app.post("/api/v1/signup", async (req, res) => {
   try {
     // console.log(req.body);
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || !username) {
       return res
         .status(400)
         .json({ msg: "Fill Both the Input", response: "error" });
@@ -202,6 +202,7 @@ app.post("/api/v1/signup", async (req, res) => {
     // create out new user
     const newUserModel = new userLoginModel({
       email: email,
+      username: username,
 
       password: passwordHash,
     });
