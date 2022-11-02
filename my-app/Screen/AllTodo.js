@@ -7,6 +7,7 @@ import {
   TextInput,
   RefreshControl,
   StyleSheet,
+  Image,
   Pressable,
 } from "react-native";
 import TdoList from "../components/TdoList";
@@ -39,6 +40,7 @@ const renderTodoItem = (itemData) => {
 
 function AllTodo() {
   const [textInput, setTextInput] = useState("");
+  const [isTaskSave, setIsTaskSave] = useState(true);
   const isFoucsed = useIsFocused();
   const [refreshing, setRefreshing] = useState(true);
   const { user } = React.useContext(UserContext);
@@ -52,18 +54,9 @@ function AllTodo() {
 
   const [task, setTask] = useState([]);
   useEffect(() => {
-    // function fetchTask() {
-    //   fetch(`${Domain}/api/v1/alltask`, {
-    //     method: "GET",
-    //   })
-    //     .then((respo) => respo.json())
-    //     .then((res) => {
-    //       // console.log("homepage", res);
-    //       setTask(res);
-    //     });
-    // }
-    if (isFoucsed) loadData();
-  }, [isFoucsed]);
+    // if (isFoucsed) loadData();
+    loadData();
+  }, [isTaskSave]);
 
   const loadData = () => {
     fetch(`${Domain}/api/v1/taskbyid/${userId}`, {
@@ -94,6 +87,9 @@ function AllTodo() {
       .then((res) => res.json())
       .then((respo) => {
         console.log(respo);
+        setTextInput("");
+        setIsTaskSave((laststate) => !laststate);
+
         // navigation.navigate("Todo List");
       });
   };
@@ -129,20 +125,35 @@ function AllTodo() {
             placeholder="Add Task"
             onChangeText={TaskHandler}
             // onChangeText={TaskHandler}
-            // value={textInput}
+            value={textInput}
           />
         </View>
       </View>
 
       <Animatable.View animation="fadeInUpBig" style={styletubes.footer}>
-        <FlatList
-          data={task}
-          renderItem={renderTodoItem}
-          keyExtractor={(item) => item._id}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={loadData} />
-          }
-        />
+        <View style={styletubes.todo_text_container}>
+          <Text style={styletubes.text_todo}>Your To-do List:</Text>
+        </View>
+        {task.length === 0 ? (
+          <View style={styletubes.emptytodo}>
+            <Image
+              style={styletubes.image}
+              source={require("../image/todo_empty_white.png")}
+            />
+            <Text style={styletubes.text_empty}>
+              Oops! You don't have any to do list{" "}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={task}
+            renderItem={renderTodoItem}
+            keyExtractor={(item) => item._id}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={loadData} />
+            }
+          />
+        )}
       </Animatable.View>
     </View>
   );
@@ -158,7 +169,7 @@ const styletubes = StyleSheet.create({
   header: {
     flex: 1,
     backgroundColor: "#009387",
-    justifyContent: "flex-end",
+    justifyContent: "center",
     paddingHorizontal: 20,
     paddingBottom: 50,
     paddingTop: 50,
@@ -193,11 +204,26 @@ const styletubes = StyleSheet.create({
     fontSize: 30,
     marginBottom: 10,
   },
+  emptytodo: {
+    // marginHorizontal: 100,
+    marginVertical: 40,
+  },
+  text_empty: {
+    fontSize: 20,
+    marginHorizontal: 30,
+  },
   text_sub: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 15,
     marginBottom: 20,
+  },
+  todo_text_container: {
+    marginTop: -50,
+  },
+  text_todo: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   text_list: {
     color: "#fff",
@@ -225,5 +251,10 @@ const styletubes = StyleSheet.create({
     paddingLeft: 10,
     color: "#637381",
     fontSize: 16,
+  },
+  image: {
+    height: 300,
+    width: 300,
+    marginHorizontal: 20,
   },
 });
