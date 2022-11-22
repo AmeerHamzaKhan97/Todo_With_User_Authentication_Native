@@ -18,6 +18,7 @@ import UserContext from "./context/UserContext";
 import { Domain } from "./Domain";
 import { ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PraticeTicket from "./Screen/PraticeTicket";
 
 const Stack = createNativeStackNavigator();
 const Bottom = createBottomTabNavigator();
@@ -54,6 +55,7 @@ function BottomTabs() {
         })}
         name="Profile"
         component={Profile}
+        // component={PraticeTicket}
       />
     </Bottom.Navigator>
   );

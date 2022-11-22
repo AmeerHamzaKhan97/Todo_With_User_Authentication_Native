@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
 import * as imagePicker from "expo-image-picker";
-import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import OutLinedButton from "../UI/OutLinedButton";
+import Button from "../UI/Button";
 
 function ImagePicker({ onTakeImage, onUpdateProfile }) {
   // let length = onUpdateProfile.length;
   // console.log("updateimage", length);
   const [pickedImagePath, setPickedImagePath] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   // setPickedImagePath(onUpdateProfile);c
   const showImagePicker = async () => {
     // Ask the user for the permission to access the media library

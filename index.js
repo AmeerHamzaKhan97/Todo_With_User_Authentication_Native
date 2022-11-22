@@ -11,6 +11,7 @@ const taskModel = require("./model/TaskModel");
 const profileModel = require("./model/ProfileModel");
 const userLoginModel = require("./model/UserLoginModel");
 const ProfileModel = require("./model/ProfileModel");
+const ticketModel = require("./model/PraticeTicketModel");
 
 const app = express();
 
@@ -113,6 +114,7 @@ app.put("/api/v1/updatetask/:id", async (req, res) => {
     const { task, userId } = req.body;
 
     const updateTask = await taskModel.findById({ _id: req.params.id });
+
     updateTask.task = task;
     updateTask.userId = userId;
 
@@ -169,6 +171,39 @@ app.post("/api/v1/saveprofile", async (req, res) => {
     });
     await newProfile.save();
     res.status(200).json({ msg: "Profile Saved" });
+  } catch (error) {
+    res.status(500).json({ error: error.message, response: "error" });
+  }
+});
+
+app.put("/api/v1/updateprofile/:id", async (req, res) => {
+  try {
+    console.log(req.body);
+    // const { task, userId } = req.body;
+
+    await profileModel.updateOne(
+      { user_id: req.params.id },
+      {
+        first_name: req.body.firstName,
+        last_name: req.body.lastName,
+        phone_number: req.body.number,
+        profile_picture_path: req.body.profileImagePath,
+        user_id: req.body.user_id,
+        email: req.body.email,
+      }
+    );
+
+    // const updateProfile = await profileModel.find({
+    //   user_id: req.params.id,
+    // });
+    // updateProfile[0].first_name = "harry";
+    // // updateTask.userId = userId;
+    // console.log(updateProfile[0].first_name);
+    // console.log(updateProfile);
+
+    // await updateProfile.save();
+
+    res.json({ msg: "update profile done" });
   } catch (error) {
     res.status(500).json({ error: error.message, response: "error" });
   }
@@ -297,6 +332,71 @@ app.get("/api/v1/getprofile/:id", async (req, res) => {
     res.json({ error: error.message, status: "500", response: "error" });
   }
 });
+
+// start ticket partice api //
+
+app.post("/api/v1/addticket", async (req, res) => {
+  // console.log(req.body);
+  try {
+    const { title, body, userId, read, received } = req.body;
+    const newticket = new ticketModel({
+      title: title,
+      body: body,
+      userId: userId,
+
+      received: received,
+
+      read: read,
+    });
+    await newticket.save();
+    res.send("done");
+  } catch (error) {
+    res.status(500).json({ error: error.message, response: "error" });
+  }
+});
+
+app.get("/api/v1/getticket/:id", async (req, res) => {
+  try {
+    const ticketById = await ticketModel.find({ userId: req.params.id });
+    if (!ticketById) {
+      return res.send("no ticket");
+    }
+    res.send(ticketById);
+  } catch (error) {
+    res.status(500).json({ error: error.message, response: "error" });
+  }
+});
+
+app.get("/api/v1/getnotification/:id", async (req, res) => {
+  try {
+    const notification = await ticketModel.find({ userId: req.params.id });
+    if (!notification) {
+      return res.send("no data found");
+    }
+    const data = notification.filter(
+      (receivedvalue) => receivedvalue.received === false
+    );
+
+    // console.log(data);
+    res.send(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message, response: "error" });
+  }
+});
+
+app.put("/api/v1/isreceived/:id", async (req, res) => {
+  try {
+    const object = await ticketModel.findById({ _id: req.params.id });
+
+    object.received = true;
+    await object.save();
+    res.send(object);
+  } catch (error) {
+    res.status(500).json({ error: error.message, response: "error" });
+  }
+});
+
+// end ticket partice api//
 
 app.listen(PORT, function () {
   console.log(`App listening at http://192.168.0.169:${PORT}`);

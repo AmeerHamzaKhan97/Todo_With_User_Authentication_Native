@@ -1,9 +1,14 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-function Button({ children, onPress }) {
+function Button({ children, onPress, futurestyle, logoutStyle }) {
   return (
     <Pressable
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.button,
+        futurestyle,
+        logoutStyle,
+        pressed && styles.pressed,
+      ]}
       onPress={onPress}
     >
       <View>
@@ -20,7 +25,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    backgroundColor: "#c30b64",
+    backgroundColor: "#69ca9c",
     elevation: 2,
     shadowColor: "black",
     shadowOffset: { width: 1, height: 1 },

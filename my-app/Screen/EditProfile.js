@@ -4,12 +4,14 @@ import ImagePicker from "../components/ImagePicker";
 import { Domain } from "../Domain";
 import OutLinedButton from "../UI/OutLinedButton";
 import UserContext from "../context/UserContext";
+import Button from "../UI/Button";
 
 function EditProfile({ route }) {
   const updateUserId = route.params?.userId;
-  // console.log(updateUserId.length);
-  const { user } = React.useContext(UserContext);
-  const id = user.id;
+  // console.log("update", updateUserId);
+  // const { user } = React.useContext(UserContext);
+  // const id = user.id;
+  // console.log("id", id);
   const [selectedImage, setSelectedImage] = useState();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -94,7 +96,7 @@ function EditProfile({ route }) {
 
     console.log(formData);
     await fetch(`${Domain}/api/v1/updateprofile/${updateUserId}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         Accept: "application/json",
         "Content-Type": "multipart/form-data",
@@ -113,7 +115,7 @@ function EditProfile({ route }) {
         onUpdateProfile={selectedImage}
       />
       <View style={styles.textContainer}>
-        <Text>First Name</Text>
+        <Text style={styles.firstText}>First Name</Text>
         <TextInput
           style={styles.textinput}
           onChangeText={firstNameHandler}
@@ -146,13 +148,16 @@ function EditProfile({ route }) {
           value={email}
         />
       </View>
-      <OutLinedButton
+      {/* <OutLinedButton
         futurestyle={styles.buttonstyle}
         icon="save-outline"
         onPress={updateUserId ? updateProfile : saveProfile}
       >
         {updateUserId ? "Update" : "Save"}
-      </OutLinedButton>
+      </OutLinedButton> */}
+      <Button futurestyle={styles.buttonstyle} onPress={updateProfile}>
+        Save
+      </Button>
     </ScrollView>
   );
 }
@@ -162,15 +167,23 @@ export default EditProfile;
 const styles = StyleSheet.create({
   textinput: {
     borderBottomWidth: 1,
+    borderBottomColor: "#bbc0c9",
     // marginHorizontal: 20,
-    // marginTop: 50,
+    // marginBottom: 5,
+    fontSize: 22,
+    fontWeight: "400",
   },
   textContainer: {
     marginTop: 20,
     marginHorizontal: 20,
+    // marginVertical:
   },
   buttonstyle: {
     marginTop: 20,
     marginHorizontal: 20,
+  },
+  firstText: {
+    fontWeight: "300",
+    fontSize: 15,
   },
 });
